@@ -3,7 +3,7 @@ module Mutations
     argument :title, String, required: true
     argument :description, String, required: true
 
-    # resolveの返り値のkeyになる。
+    # NOTE: resolveの返り値のkeyになる。
     field :post, Types::PostType, null: true
     field :errors, [String], null: false
 
