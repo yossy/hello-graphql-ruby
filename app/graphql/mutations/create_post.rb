@@ -1,19 +1,25 @@
 module Mutations
   class CreatePost < BaseMutation
-    graphql_name 'CreatePost'
-
     argument :title, String, required: true
     argument :description, String, required: true
 
+    # resolveの返り値のkeyになる。
     field :post, Types::PostType, null: true
-    field :result, Boolean, null: true
+    field :errors, [String], null: false
 
     def resolve(title:, description:)
-      post = Post.create(title: title, description: description)
-      {
-        post: post,
-        result: post.errors.blank?
-      }
+      post = Post.new(title: title, description: description)
+      if post.save
+        {
+          post: post,
+          errors: []
+        }
+      else
+        {
+          post: nil,
+          errors: post.errors.full_messages
+        }
+      end
     end
   end
 end
